@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/03 22:19:36 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/03 22:39:46 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/06 14:42:43 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,25 +34,14 @@ void	ft_putstr(char *s)
 	write(1, s, ft_strlen(s));
 }
 
-void	ft_putnbr(int n)
+void	ft_putnbr(unsigned int n)
 {
-	if (n >= 0 && n < 10)
+	if (n < 10)
 		ft_putchar(n + '0');
 	if (n > 9)
 	{
 		ft_putnbr(n / 10);
 		ft_putchar(n % 10 + '0');
-	}
-	if (n < 0)
-	{
-		ft_putchar('-');
-		if (n > -10)
-			ft_putnbr(-n);
-		else
-		{
-			ft_putnbr(-(n / 10));
-			ft_putchar(-(n % 10) + '0');
-		}
 	}
 }
 
@@ -93,11 +82,11 @@ void	print_flag_c(int option)
 	if (option == (1 << 16))
 		ft_putstr("0 ");
 	if (option == (1 << 17))
-		ft_putstr("+ ");
-	if (option == (1 << 18))
-		ft_putstr("- ");
-	if (option == (1 << 19))
 		ft_putstr("ESP ");
+	if (option == (1 << 18))
+		ft_putstr("+ ");
+	if (option == (1 << 19))
+		ft_putstr("- ");
 }
 
 void	print_flag(int flag)
@@ -121,11 +110,61 @@ void	print_list(t_list *list)
 	args = 1;
 	while (list)
 	{
-		printf("ARGUMENT No %d\n\n", args++);
+		printf("#### ARGUMENT No %d ####\n\n", args++);
 		printf("LMC : %d\n", list->width);
 		printf("precision : %d\n", list->precision);
 		printf("binary flag : %d\n\n", list->flag);
 		print_flag(list->flag);
+		printf("########################\n\n");
 		list = list->next;
 	}
+}
+
+t_list		*ft_list_push_back(t_list *list, int width, int precision, int flag)
+{
+	t_list	*node;
+	t_list	*head;
+
+	head = list;
+	if (!(node = (t_list *)malloc(sizeof(t_list))))
+		return (NULL);
+	node->width = width;
+	node->precision = precision;
+	node->flag = flag;
+	node->next = NULL;
+	if (!list)
+		return (node);
+	while (list->next)
+		list = list->next;
+	list->next = node;
+	return (head);
+}
+
+int			bit_value(int bin, int pos)
+{
+	int mask;
+
+	mask = 1 << pos;
+	if (bin & mask)
+		return (1);
+	else
+		return (0);
+}
+
+void	print_bit_int(unsigned int bin)
+{
+	unsigned int mask;
+
+	mask = 1 << 31;
+	ft_putnbr(mask);
+	ft_putchar('\n');
+	while (mask)
+	{
+		if (mask & bin)
+			write(1, "1", 1);
+		else
+			write (1, "0", 1);
+		mask >>= 1;
+	}
+	ft_putchar('\n');
 }

@@ -162,19 +162,23 @@ void float2bin(float f)
 	double_gen(signe, mantisse, exposant);
 }
 
-
-
-int 	main()
+void	zero_filling(char *str, int max)
 {
-//	float2bin(165);
-	double res = 0.123456789123456789;
-	int count = 1;
+	int i;
 
-	while (count < 18)
-	{
-		res *= 10.00000000000000000000;
-		printf("%.100f\n", res);
-		count += 1;
-	}
+	i = 0;
+	while (i < max)
+		str[i++] = '0';
+}
+
+void	num_filling(char *str, unsigned long long nb)
+{
+	printf("%llu\n", nb);
+}
+
+int main()
+{
+	printf("|%+0.0d|\n", 0);
+	printf("|%+d|\n", 0);
 	return (0);
 }
