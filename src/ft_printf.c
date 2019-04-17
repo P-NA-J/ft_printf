@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/03 21:56:41 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/10 14:54:54 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/11 16:42:53 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,29 @@
 #include "../include/ft_printf.h"
 #include "../libft/libft.h"
 
+void	print_final(const char *restrict format, t_plist *list)
+{
+	while (*format)
+	{
+		if (*format == '%' && *(format + 1) != '%')
+		{
+			ft_putstr(list->tab);
+			list = list->next;
+			while (*format != 'c' && *format != 's' && *format != 'p' && *format != 'd' && *format != 'i' && *format != 'o' && *format != 'u' && *format != 'x' && *format != 'X' && *format != 'f')
+				format += 1;
+			format += 1;
+		}
+		ft_putchar(*format);
+		format += 1;
+	}
+}
+
 int 	tab_gen(t_plist *list, va_list arg)
 {
 	if (list->flag & (1 << 3) || list->flag & (1 << 4))
 		return(integer_d_i(list, arg));
+	if (list->flag & (1 << 5) || list->flag & (1 << 6) || list->flag & (1 << 7) || list->flag & (1 << 8))
+		return (unsigned_u_o_x_X(list, arg));
 	return (1);
 }
 
@@ -52,5 +71,6 @@ int			ft_printf(const char *restrict format, ...)
 	if (!fill_list(list, arg_list))
 		return (-1);
 	va_end(arg_list);
+	print_final(format, list);
 	return (ret);
 }

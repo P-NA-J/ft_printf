@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 10:24:01 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/10 14:27:30 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/11 16:45:40 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int vlc_process_di(long nb, t_plist *list)
 	return (vlc);
 }
 
-int count_length(t_plist *list, long nb)
+int count_length_di(t_plist *list, long nb)
 {
 	int count;
 
@@ -63,7 +63,7 @@ char		*ft_itoa_di(long nb, t_plist *list)
 	unsigned long tmp;
 
 	digit = nb_digit(nb);
-	count = count_length(list, nb);
+	count = count_length_di(list, nb);
 	if (!(str = (char *)malloc(sizeof(char) * (count + 1))))
 		return (NULL);
 	zero_filling(str, count);
@@ -101,10 +101,6 @@ int			integer_d_i(t_plist *list, va_list arg)
 		ft_strcpy(list->tab, ft_itoa_di(nb,list));
 	else
 		ft_str_rev_cpy(list->tab, ft_itoa_di(nb,list));
-	ft_putchar('|');
-	ft_putstr(list->tab);
-	ft_putchar('|');
-	ft_putchar('\n');
 	return (1);
 }
 

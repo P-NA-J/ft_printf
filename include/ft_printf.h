@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/03 22:01:27 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/10 13:57:32 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/11 16:27:12 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,7 @@ t_plist				*ft_list_push_back(t_plist *list, int width, int precision, int flag)
 char				*ft_strcpy(char *dst, const char *src);
 int					ft_atoi(const char *str);
 void				ft_str_rev_cpy(char *s1, char *s2);
+char				*ft_itoa_base(int nb, char *base);
+int					ft_digit(unsigned long nb, char *base);
+int					unsigned_u_o_x_X(t_plist *list, va_list arg);
 #endif

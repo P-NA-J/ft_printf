@@ -1,11 +1,10 @@
-#include <stdio.h>
-#include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 
-long		power(long nb, long p)
+unsigned long		power_unsigned(long nb, long p)
 {
-	long result;
+	unsigned long result;
 
 	result = nb;
 	if (p == 0)
@@ -18,37 +17,23 @@ long		power(long nb, long p)
 	return (result);
 }
 
-long		power_rank(long nb, long len_base)
+unsigned long		power_rank(unsigned long nb, unsigned long len_base)
 {
-	long result;
+	unsigned long result;
 
 	result = 0;
 	if (nb == 0)
 		return (0);
-	if (nb < 0)
-		while (-(nb / power(len_base, result)))
-			result += 1;
-	else
-		while (nb / power(len_base, result))
-			result += 1;
+	while (nb / power_unsigned(len_base, result))
+		result += 1;
 	return (result - 1);
 }
 
-long		ft_strlen(char *str)
-{
-	long		size;
-
-	size = 0;
-	while (str[size])
-		size += 1;
-	return (size);
-}
-
-int		nb_is_neg(int nb, int iter, char *base)
+long	nb_is_neg(long nb, unsigned long iter, char *base)
 {
 	ft_putchar('-');
-	ft_putchar(base[-(nb / power(ft_strlen(base), iter))]);
-	return (-nb - (-nb / power(ft_strlen(base), iter)) * power(ft_strlen(base), iter));
+	ft_putchar(base[-(nb / power_unsigned(ft_strlen(base), iter))]);
+	return (-nb - (-nb / power_unsigned(ft_strlen(base), iter)) * power_unsigned(ft_strlen(base), iter));
 }
 
 void	ft_putnbr_base(long nb, char *base)
@@ -65,22 +50,36 @@ void	ft_putnbr_base(long nb, char *base)
 	}
 	while (iter >= 0)
 	{
-		ft_putchar(base[nb / power(len_base, iter)]);
-		nb -= (nb / power(len_base, iter)) * power(len_base, iter);
+		ft_putchar(base[nb / power_unsigned(len_base, iter)]);
+		nb -= (nb / power_unsigned(len_base, iter)) * power_unsigned(len_base, iter);
 		iter -= 1;
 	}
 }
 
-int	ft_digit(int nb, char *base)
+void	ft_putnbr_base_unsigned(unsigned long nb, char *base)
+{
+	unsigned long		len_base;
+	long		iter;
+
+	len_base = ft_strlen(base);
+	iter = power_rank(nb, len_base);
+	printf("len_base = %lu\niter = %ld\n", len_base, iter);
+/*	while (iter >= 0)
+	{
+		ft_putchar(base[nb / power(len_base, iter)]);
+		nb -= (nb / power(len_base, iter)) * power(len_base, iter);
+		iter -= 1;
+	}
+*/}
+
+int	ft_digit(unsigned long nb, char *base)
 {
 	int result;
 
 	result = power_rank(nb, ft_strlen(base));
-	if (nb < 0)
-		result += 1;
 	return (result + 1);
 }
-
+/*
 void	ft_fill_tab(int nb, char *base, char *tab, int digit)
 {
 	int i;
@@ -117,3 +116,4 @@ char *ft_itoa_base(int nb, char *base)
 		ft_fill_tab(nb, base, result, nb_digit - 1);
 	return (result);
 }
+*/
