@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 14:34:24 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/17 12:06:05 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/18 17:54:53 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <float.h>
 #include "../include/ft_printf.h"
 
-void		convert_option(const char *restrict format,unsigned int *flag, int *i_ptr)
+void		convert_option(const char *restrict format, t_plist *list, int *i_ptr)
 {
 	int i;
 
@@ -26,16 +26,16 @@ void		convert_option(const char *restrict format,unsigned int *flag, int *i_ptr)
 	while (format[i] == '0' || format[i] == '-' || format[i] == '+'
 	|| format[i] == '#' || format[i] == ' ')
 	{
-		if (format[i] == '#' && !(*flag & (1 << 15)))
-			*flag += (1 << 15);
-		if (format[i] == '0' && !(*flag & (1 << 16)))
-			*flag += (1 << 16);
-		if (format[i] == ' ' && !(*flag & (1 << 17)))
-			*flag += (1 << 17);
-		if (format[i] == '+' && !(*flag & (1 << 18)))
-			*flag += (1 << 18);
-		if (format[i] == '-' && !(*flag & (1 << 19)))
-			*flag += (1 << 19);
+		if (format[i] == '#' && !(list->flag & SHARP_FLAG))
+			list->flag += SHARP_FLAG;
+		if (format[i] == '0' && !(list->flag & ZERO_FLAG))
+			list->flag += ZERO_FLAG;
+		if (format[i] == ' ' && !(list->flag & SPACE_FLAG))
+			list->flag += SPACE_FLAG;
+		if (format[i] == '+' && !(list->flag & PLUS_FLAG))
+			list->flag += PLUS_FLAG;
+		if (format[i] == '-' && !(list->flag & MINUS_FLAG))
+			list->flag += MINUS_FLAG;
 		i += 1;
 	}
 	*i_ptr = i;
@@ -76,59 +76,71 @@ int			is_size(int flag)
 	return (1);
 }
 
-int			set_option(unsigned int *flag, int pos, const char *restrict format)
+int			set_option(t_plist *list, const char *restrict format)
 {
-	if (!is_size(*flag))
+	if (!is_size(list->flag))
 		return (0);
-	if (*(format + 1) == *format)
-		*flag += (1 << (pos + 1));
-	else
-		*flag += (1 << pos);
+	if (*format == 'L')
+		list->flag += MAJL_FLAG;
+	else if (*format == 'l')
+	{
+		if (*(format + 1) == 'l')
+			list->flag += MINLL_FLAG;
+		else
+			list->flag += MINL_FLAG;
+	}
+	else if (*format == 'h')
+	{
+		if (*(format + 1) == 'h')
+			list->flag += HH_FLAG;
+		else
+			list->flag += H_FLAG;
+	}
 	return (1);
 }
 
-int			convert_size(const char *restrict format,unsigned int *flag, int *i_ptr)
+int			convert_size(const char *restrict format,t_plist *list, int *i_ptr)
 {
 	int i;
 
 	i = *i_ptr;
 	if (format[i] == 'L')
-		if (!set_option(flag, 12, &format[i++]))
+		if (!set_option(list, &format[i++]))
 			return (0);
 	if (format[i] == 'l')
-		if (!set_option(flag, 10, &format[i++]))
+		if (!set_option(list, &format[i++]))
 			return (0);
 	if (format[i] == 'h')
-		if (!set_option(flag, 13, &format[i++]))
+		if (!set_option(list, &format[i++]))
 			return (0);
-	if ((*flag & (1 << 11)) || (*flag & (1 << 14)))
+	if ((list->flag & MINLL_FLAG) || (list->flag & HH_FLAG))
 		i += 1;
 	*i_ptr = i;
 	return (1);
 }
 
-void		convert_type(const char *restrict format,unsigned int *flag, int i)
+void		convert_type(const char *restrict format,t_plist *list, int i)
 {
 	if (format[i] == 'c')
-		*flag += (1 << 0);
+		list->flag += C_FLAG;
 	else if (format[i] == 's')
-		*flag += (1 << 1);
+		list->flag += S_FLAG;
 	else if (format[i] == 'p')
-		*flag += (1 << 2);
+		list->flag += P_FLAG;
 	else if (format[i] == 'd')
-		*flag += (1 << 3);
+		list->flag += D_FLAG;
 	else if (format[i] == 'i')
-		*flag += (1 << 4);
+		list->flag += I_FLAG;
 	else if (format[i] == 'o')
-		*flag += (1 << 5);
+		list->flag += O_FLAG;
 	else if (format[i] == 'u')
-		*flag += (1 << 6);
+		list->flag += U_FLAG;
 	else if (format[i] == 'x')
-		*flag += (1 << 7);
+		list->flag += X_FLAG;
 	else if (format[i] == 'X')
-		*flag += (1 << 8);
+		list->flag += BIGX_FLAG;
 	else if (format[i] == 'f')
-		*flag += (1 << 9);
+		list->flag += F_FLAG;
 }
 
 int			check_step_parse(const char *restrict format, int i, int step)
@@ -154,61 +166,61 @@ int			check_step_parse(const char *restrict format, int i, int step)
 	return (1);
 }
 
-int			convert_flag(const char *restrict format, t_plist **list, int *i_ptr)
+int			convert_flag(const char *restrict format, t_plist **list_ptr, int *i_ptr)
 {
 	int		i;
+	t_plist	*list;
 	t_plist	*head;
 
 	i = *i_ptr + 1;
-	*list = ft_list_push_back(*list, 1, 0, 0);
-	head = *list;
-	while ((*list)->next)
-		(*list) = (*list)->next;
-	convert_option(format, &(*list)->flag, &i);
+	list = ft_list_push_back(*list_ptr, 1, 0, 0);
+	head = list;
+	while (list->next)
+		list = list->next;
+	convert_option(format, list, &i);
 	if (!(check_step_parse(format, i, 1)))
 		return (0);
-	convert_lmc_width(format, *list, &i);
+	convert_lmc_width(format, list, &i);
 	if (!(check_step_parse(format, i, 2)))
 		return (0);
-	if (!convert_size(format, &(*list)->flag, &i))
+	if (!convert_size(format,list, &i))
 		return (0);
 	if (!(check_step_parse(format, i, 3)))
 		return (0);
-	convert_type(format, &(*list)->flag, i);
+	convert_type(format, list, i);
 	*i_ptr = i + 1;
-	*list = head;
+	*list_ptr = head;
 	return (1);
 }
 
-void		correct_parse(t_plist **list_ptr)
+void		correct_parse(t_plist *list)
 {
-	t_plist *list;
-
-	list = *list_ptr;
 	while (list)
 	{
-		if (list->flag & (1 << 16))
-			if (list->precision || list->flag & (1 << 19))
-				list->flag -= (1 << 16);
-		if (list->flag & (1 << 17))
-			if (list->flag & (1 << 18))
-				list->flag -= (1 << 17);
-		if (list->flag & (1 << 11))
-			list->flag = list->flag - (1 << 11) + (1 << 10);
+		if (list->flag & ZERO_FLAG)
+			if (list->precision || list->flag & MINUS_FLAG)
+				list->flag -= ZERO_FLAG;
+		if (list->flag & SPACE_FLAG)
+			if (list->flag & PLUS_FLAG)
+				list->flag -= SPACE_FLAG;
+		if (list->flag & MINLL_FLAG)
+			list->flag = list->flag - MINLL_FLAG + MINL_FLAG;
 		list = list->next;
 	}
 }
 
-int			parsing(const char *restrict format, t_plist **list)
+int			parsing(const char *restrict format, t_plist **list_ptr)
 {
 	int		i;
+	t_plist	*list;
 
 	i = 0;
+	list = *list_ptr;
 	while (format[i])
 	{
 		if (format[i] == '%' && format[i + 1] != '%')
 		{
-			if (!(convert_flag(format, list, &i)))
+			if (!(convert_flag(format, &list, &i)))
 				return (0);
 		}
 		else if (format[i] == '%' && format[i + 1] == '%')
@@ -217,5 +229,6 @@ int			parsing(const char *restrict format, t_plist **list)
 			i += 1;
 	}
 	correct_parse(list);
+	*list_ptr = list;
 	return (1);
 }

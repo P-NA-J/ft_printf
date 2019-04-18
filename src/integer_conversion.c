@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 10:24:01 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/17 19:36:56 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/18 18:58:17 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ long	tab_integer(t_plist *list, va_list arg)
 {
 	long nb;
 
-	if (list->flag & (1 << 10))
+	if (list->flag & MINL_FLAG)
 		nb = va_arg(arg, long);
 	else
 		nb = va_arg(arg, int);
@@ -36,8 +36,10 @@ unsigned long vlc_process_di(long nb, t_plist *list)
 
 	vlc = higher_value(list->precision, list->width, nb_digit(nb));
 	if (vlc == nb_digit(nb) || vlc == list->precision)
-		if (((list->flag & (1 << 18)) && nb >= 0) || ((list->flag & (1 << 17)) && nb >= 0))
+		if (((list->flag & PLUS_FLAG) && nb >= 0) || ((list->flag & SPACE_FLAG) && nb >= 0))
 			vlc += 1;
+	if (vlc == list->precision && nb < 0)
+		vlc += 1;
 	return (vlc);
 }
 
@@ -46,24 +48,28 @@ int count_length_di(t_plist *list, long nb)
 	unsigned int count;
 
 	count = nb_digit(nb);
-	if ((list->flag & 1 << 16) && list->width > count)
+	if ((list->flag & ZERO_FLAG) && list->width > count)
 		count = list->width;
 	else if (list->precision > count)
 		count = list->precision;
-	if (list->flag & (1 << 18) && nb >= 0)
+	if ((list->precision == count) && (nb < 0))
+		count += 1;
+	if (list->flag & PLUS_FLAG && nb >= 0)
+		count += 1;
+	if (list->flag & SPACE_FLAG && nb >= 0)
 		count += 1;
 	return (count);
 }
 
-char		*ft_itoa_di(long nb, t_plist *list)
+char					*ft_itoa_di(long nb, t_plist *list)
 {
-	char	*str;
-	unsigned int		count;
-	int		digit;
-	unsigned long tmp;
+	char				*str;
+	int		count;
+	unsigned int		i;
+	unsigned long		tmp;
 
 	tmp = 0;
-	digit = nb_digit(nb);
+	i = 0;
 	count = count_length_di(list, nb);
 	if (!(str = (char *)malloc(sizeof(char) * (count + 1))))
 		return (NULL);
@@ -73,16 +79,14 @@ char		*ft_itoa_di(long nb, t_plist *list)
 	{
 		str[0] = '-';
 		tmp = -nb;
-		count -= 1;
 	}
 	else if (nb >= 0)
 		tmp = nb;
-	if (nb >= 0 && (list->flag & (1 << 18)))
-	{
+	if (nb >= 0 && (list->flag & PLUS_FLAG))
 		str[0] = '+';
-		count -= 1;
-	}
-	while (count)
+	if (list->flag & SPACE_FLAG && nb >= 0)
+		str[0] = ' ';
+	while (count > 0 && str[count - 1] == '0')
 	{
 		str[count - 1] = '0' + tmp % 10;
 		tmp /= 10;
@@ -102,8 +106,7 @@ int			integer_d_i(t_plist *list, va_list arg)
 		return (0);
 	list->tab[vlc] = 0;
 	space_filling(list->tab, vlc);
-	printf("# |%s|\n", ft_itoa_di(nb,list));
-	if (list->flag & (1 << 19))
+	if (list->flag & MINUS_FLAG)
 		ft_strcpy(list->tab, ft_itoa_di(nb,list));
 	else
 		ft_str_rev_cpy(list->tab, ft_itoa_di(nb,list));

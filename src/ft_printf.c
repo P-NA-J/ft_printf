@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/03 21:56:41 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/18 09:33:22 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/18 19:51:33 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int			ft_printf(const char *restrict format, ...)
 	unsigned long	ret;
 
 	list = NULL;
+	ret = 0;
 	va_start(arg_list, format);
 	if (!format)
 		return (-1);
