@@ -20,13 +20,3 @@ void float2bin(float f)
 	dump_bin("mantisse", mantisse, 23);
 	dump_bin("exposant", exposant, 8);
 }
-
-int main(void)
-{
-	int i;
-	float f;
-
-	f = 0.001999999 + 0.0009999999;
-	printf("%.60f", f);
-	return (0);
-}
