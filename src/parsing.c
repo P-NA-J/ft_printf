@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 14:34:24 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/10 14:54:42 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/17 12:06:05 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <float.h>
 #include "../include/ft_printf.h"
 
-void		convert_option(const char *restrict format, int *flag, int *i_ptr)
+void		convert_option(const char *restrict format,unsigned int *flag, int *i_ptr)
 {
 	int i;
 
@@ -76,7 +76,7 @@ int			is_size(int flag)
 	return (1);
 }
 
-int			set_option(int *flag, int pos, const char *restrict format)
+int			set_option(unsigned int *flag, int pos, const char *restrict format)
 {
 	if (!is_size(*flag))
 		return (0);
@@ -87,7 +87,7 @@ int			set_option(int *flag, int pos, const char *restrict format)
 	return (1);
 }
 
-int			convert_size(const char *restrict format, int *flag, int *i_ptr)
+int			convert_size(const char *restrict format,unsigned int *flag, int *i_ptr)
 {
 	int i;
 
@@ -107,7 +107,7 @@ int			convert_size(const char *restrict format, int *flag, int *i_ptr)
 	return (1);
 }
 
-void		convert_type(const char *restrict format, int *flag, int i)
+void		convert_type(const char *restrict format,unsigned int *flag, int i)
 {
 	if (format[i] == 'c')
 		*flag += (1 << 0);
@@ -201,7 +201,6 @@ void		correct_parse(t_plist **list_ptr)
 
 int			parsing(const char *restrict format, t_plist **list)
 {
-	t_plist	*tmp;
 	int		i;
 
 	i = 0;

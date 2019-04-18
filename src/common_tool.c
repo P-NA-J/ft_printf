@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/10 11:45:11 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/10 14:26:40 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/17 12:46:55 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,22 +59,22 @@ t_plist		*ft_list_push_back(t_plist *list, int width, int precision, int flag)
 
 int		higher_value(int precision, int width, int nb)
 {
-	if (precision > width)
+	if (precision >= width)
 	{
-		if (precision > nb)
+		if (precision >= nb)
 			return (precision);
 	}
-	else if (width > nb)
+	else if (width >= nb)
 		return (width);
 	else
 		return (nb);
 	return (0);
 }
 
-int 	nb_digit(long n)
+unsigned long 	nb_digit(long n)
 {
 	unsigned long tmp;
-	int value;
+	unsigned long value;
 
 	value = 0;
 	if(n == 0)

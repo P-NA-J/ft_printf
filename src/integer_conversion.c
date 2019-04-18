@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 10:24:01 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/11 16:45:40 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/17 19:36:56 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,27 +30,27 @@ long	tab_integer(t_plist *list, va_list arg)
 	return (nb);
 }
 
-int vlc_process_di(long nb, t_plist *list)
+unsigned long vlc_process_di(long nb, t_plist *list)
 {
-	int vlc;
+	unsigned long vlc;
 
 	vlc = higher_value(list->precision, list->width, nb_digit(nb));
 	if (vlc == nb_digit(nb) || vlc == list->precision)
-		if (((list->flag & (1 << 18)) && nb >= 0) || (list->flag & (1 << 17)))
+		if (((list->flag & (1 << 18)) && nb >= 0) || ((list->flag & (1 << 17)) && nb >= 0))
 			vlc += 1;
 	return (vlc);
 }
 
 int count_length_di(t_plist *list, long nb)
 {
-	int count;
+	unsigned int count;
 
 	count = nb_digit(nb);
 	if ((list->flag & 1 << 16) && list->width > count)
 		count = list->width;
 	else if (list->precision > count)
 		count = list->precision;
-	if (list->flag & (1 << 18) && nb > 0)
+	if (list->flag & (1 << 18) && nb >= 0)
 		count += 1;
 	return (count);
 }
@@ -58,10 +58,11 @@ int count_length_di(t_plist *list, long nb)
 char		*ft_itoa_di(long nb, t_plist *list)
 {
 	char	*str;
-	int		count;
+	unsigned int		count;
 	int		digit;
 	unsigned long tmp;
 
+	tmp = 0;
 	digit = nb_digit(nb);
 	count = count_length_di(list, nb);
 	if (!(str = (char *)malloc(sizeof(char) * (count + 1))))
@@ -72,12 +73,16 @@ char		*ft_itoa_di(long nb, t_plist *list)
 	{
 		str[0] = '-';
 		tmp = -nb;
+		count -= 1;
 	}
 	else if (nb >= 0)
 		tmp = nb;
-	if (nb >= 0 && (list->flag & 1 << 18))
+	if (nb >= 0 && (list->flag & (1 << 18)))
+	{
 		str[0] = '+';
-	while (tmp)
+		count -= 1;
+	}
+	while (count)
 	{
 		str[count - 1] = '0' + tmp % 10;
 		tmp /= 10;
@@ -89,7 +94,7 @@ char		*ft_itoa_di(long nb, t_plist *list)
 int			integer_d_i(t_plist *list, va_list arg)
 {
 	long	nb;
-	int		vlc;
+	unsigned int		vlc;
 
 	nb = tab_integer(list, arg);
 	vlc = vlc_process_di(nb, list);
@@ -97,10 +102,12 @@ int			integer_d_i(t_plist *list, va_list arg)
 		return (0);
 	list->tab[vlc] = 0;
 	space_filling(list->tab, vlc);
+	printf("# |%s|\n", ft_itoa_di(nb,list));
 	if (list->flag & (1 << 19))
 		ft_strcpy(list->tab, ft_itoa_di(nb,list));
 	else
 		ft_str_rev_cpy(list->tab, ft_itoa_di(nb,list));
 	return (1);
 }
+
 

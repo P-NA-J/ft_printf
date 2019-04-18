@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/03 21:56:41 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/11 16:42:53 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/17 19:05:08 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,6 @@
 #include <float.h>
 #include "../include/ft_printf.h"
 #include "../libft/libft.h"
-
-void	print_final(const char *restrict format, t_plist *list)
-{
-	while (*format)
-	{
-		if (*format == '%' && *(format + 1) != '%')
-		{
-			ft_putstr(list->tab);
-			list = list->next;
-			while (*format != 'c' && *format != 's' && *format != 'p' && *format != 'd' && *format != 'i' && *format != 'o' && *format != 'u' && *format != 'x' && *format != 'X' && *format != 'f')
-				format += 1;
-			format += 1;
-		}
-		ft_putchar(*format);
-		format += 1;
-	}
-}
 
 int 	tab_gen(t_plist *list, va_list arg)
 {
@@ -56,11 +39,28 @@ int		fill_list(t_plist *list, va_list arg_list)
 	return (1);
 }
 
+void		free_list(t_plist *list)
+{
+	t_plist *tmp;
+
+	tmp = NULL;
+	while (list)
+	{
+		list->width = 0;
+		list->precision = 0;
+		list->flag = 0;
+		ft_strdel(&(list->tab));
+		tmp = list;
+		list = list->next;
+		free(tmp);
+	}
+}
+
 int			ft_printf(const char *restrict format, ...)
 {
 	t_plist	*list;
 	va_list	arg_list;
-	int 	ret;
+	unsigned long	ret;
 
 	list = NULL;
 	va_start(arg_list, format);
@@ -71,6 +71,7 @@ int			ft_printf(const char *restrict format, ...)
 	if (!fill_list(list, arg_list))
 		return (-1);
 	va_end(arg_list);
-	print_final(format, list);
+	ret = print_final(list, format);
+	free_list(list);
 	return (ret);
 }

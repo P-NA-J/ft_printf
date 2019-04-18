@@ -1,10 +1,13 @@
 #include <stdio.h>
+#include "../include/ft_printf.h"
 
 char			*ft_itoa_base(long nb, char *base);
 
 int main()
 {
 
-	printf("|%s|\n", ft_itoa_base(-568921, "0123456789"));
+//	printf("%d\n",printf("%3d\n", 42));
+	ft_printf("|%+d|\n", 0);
+
 	return (0);
 }
