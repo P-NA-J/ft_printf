@@ -6,12 +6,14 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/13 09:05:49 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/18 20:05:13 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/23 16:59:30 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "../libft/libft.h"
+#include "../include/ft_printf.h"
 
 unsigned long			power_unsigned(long nb, unsigned long pow)
 {
@@ -29,9 +31,9 @@ unsigned long			power_unsigned(long nb, unsigned long pow)
 	return (res);
 }
 
-unsigned long		power_rank(unsigned long nb, unsigned long len_base)
+unsigned long			power_rank(unsigned long nb, unsigned long len_base)
 {
-	unsigned long result;
+	unsigned long		result;
 
 	result = 0;
 	if (nb == 0)
@@ -41,9 +43,9 @@ unsigned long		power_rank(unsigned long nb, unsigned long len_base)
 	return (result - 1);
 }
 
-int				base_validity(char *base)
+int						base_validity(char *base)
 {
-	char		*tmp;
+	char				*tmp;
 
 	if (!base)
 		return (0);
@@ -64,41 +66,42 @@ int				base_validity(char *base)
 	return (1);
 }
 
-unsigned long		nb_digit_base_unsigned(unsigned long nb, char *base)
+unsigned long			nb_digit_base_unsigned(unsigned long nb, char *base)
 {
-	unsigned long	base_len;
-	unsigned long	count;
+	unsigned long		base_len;
+	unsigned long		count;
 
+	if (nb == 0)
+		return (1);
 	count = 0;
 	base_len = ft_strlen(base);
-	while (nb / power_unsigned(base_len, count))
+	while (nb)
 	{
-		printf("%lu\n", count);
 		count += 1;
+		nb /= 8;
 	}
 	return (count);
 }
 
-char	*ft_itoa_base_unsigned(unsigned long nb, char *base)
+char					*ft_itoa_base_unsigned(unsigned long nb, char *base)
 {
-	char	*str;
-	int		i;
-	unsigned long	base_len;
-	unsigned long	rank;
+	char				*str;
+	int					n_dig;
+	unsigned long		base_len;
 
-	i = 0;
-	rank =
+	n_dig = nb_digit_base_unsigned(nb, base);
 	base_len = ft_strlen(base);
 	if (!base_validity(base))
 		return (NULL);
-	if (!(str = (char *)malloc(sizeof(char) * (nb_digit_base_unsigned(nb, base) + 1))))
+	if (!(str = (char *)malloc(sizeof(char) * (n_dig + 1))))
 		return (NULL);
-	ft_bzero(str, nb_digit_base_unsigned(nb, base) + 1);
+	str[n_dig] = 0;
+	zero_filling(str, n_dig);
 	while (nb)
 	{
-		str[i] = base[nb / power_unsigned(base_len, rank)];
-		nb -= (nb / power_unsigned(base_len, rank)) * power_unsigned(base_len, rank);
-		rank -= 1;
+		str[n_dig - 1] = base[nb % base_len];
+		nb /= base_len;
+		n_dig -= 1;
 	}
 	return (str);
 }

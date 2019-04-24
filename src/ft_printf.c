@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/03 21:56:41 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/18 19:51:33 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/24 14:56:24 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,20 @@
 #include "../include/ft_printf.h"
 #include "../libft/libft.h"
 
-unsigned long   print_final(t_plist *list, const char *restrict format)
+unsigned long		print_final(t_plist *list, const char *restrict format)
 {
-	unsigned long count;
+	unsigned long	count;
 
 	count = 0;
 	while (*format)
 	{
 		if (*format == '%' && *(format + 1) != '%')
 		{
-//			ft_putstr(list->tab);
-			printf("%s", list->tab);
-			while (*format != 'c' && *format != 's' && *format != 'p' && *format != 'd' && *format != 'i' && *format != 'o' && *format != 'u' && *format != 'x' && *format != 'X' && *format != 'f')
+			ft_putstr(list->tab);
+			while (*format != 'c' && *format != 's' && *format != 'p'
+			&& *format != 'd' && *format != 'i' && *format != 'o'
+			&& *format != 'u' && *format != 'x' && *format != 'X'
+			&& *format != 'f')
 				format += 1;
 			format += 1;
 			count += ft_strlen(list->tab);
@@ -38,8 +40,7 @@ unsigned long   print_final(t_plist *list, const char *restrict format)
 		}
 		else
 		{
-//			ft_putchar(*format);
-			printf("%c", *format);
+			ft_putchar(*format);
 			count += 1;
 			format += 1;
 		}
@@ -47,29 +48,30 @@ unsigned long   print_final(t_plist *list, const char *restrict format)
 	return (count);
 }
 
-int 	tab_gen(t_plist *list, va_list arg)
+int					tab_gen(t_plist *list, va_list arg)
 {
 	if (list->flag & (1 << 3) || list->flag & (1 << 4))
-		return(integer_d_i(list, arg));
-	if (list->flag & (1 << 5) || list->flag & (1 << 6) || list->flag & (1 << 7) || list->flag & (1 << 8))
-		return (unsigned_u_o_x_X(list, arg));
+		return (integer_d_i(list, arg));
+	if (list->flag & (1 << 5) || list->flag & (1 << 6)
+	|| list->flag & (1 << 7) || list->flag & (1 << 8))
+		return (unsigned_u_o_x_bigx(list, arg));
 	return (1);
 }
 
-int		fill_list(t_plist *list, va_list arg_list)
+int					fill_list(t_plist *list, va_list arg_list)
 {
 	while (list)
 	{
-		if(!tab_gen(list, arg_list))
+		if (!tab_gen(list, arg_list))
 			return (0);
 		list = list->next;
 	}
 	return (1);
 }
 
-void		free_list(t_plist *list)
+void				free_list(t_plist *list)
 {
-	t_plist *tmp;
+	t_plist			*tmp;
 
 	tmp = NULL;
 	while (list)
@@ -84,10 +86,10 @@ void		free_list(t_plist *list)
 	}
 }
 
-int			ft_printf(const char *restrict format, ...)
+int					ft_printf(const char *restrict format, ...)
 {
-	t_plist	*list;
-	va_list	arg_list;
+	t_plist			*list;
+	va_list			arg_list;
 	unsigned long	ret;
 
 	list = NULL;

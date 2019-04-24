@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/03 22:01:27 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/18 15:54:43 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/23 18:33:44 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,15 @@ void				convert_option(const char *restrict format, t_plist *list, int *i_ptr);
 int					set_option(t_plist *list, const char *restrict format);
 int					is_size(int flag);
 int					integer_d_i(t_plist *list, va_list arg);
-int					unsigned_u_o_x_X(t_plist *list, va_list arg);
+int					unsigned_u_o_x_bigx(t_plist *list, va_list arg);
 char				*ft_itoa_di(long nb, t_plist *list);
+char				*ft_itoa_uoxbigx(unsigned long nb, t_plist *list);
 int					count_length(t_plist *list, long nb);
-int					count_length_uoxX(unsigned long nb, t_plist *list);
+int					count_length_uoxbigx(unsigned long nb, t_plist *list);
 unsigned long		nb_digit(long n);
-int					nb_digit_uoxX(unsigned long nb, t_plist *list);
+unsigned int		nb_digit_uoxbigx(unsigned long nb, t_plist *list);
 unsigned long		vlc_process_di(long nb, t_plist *list);
-int					vlc_process_uoxX(unsigned long nb, t_plist *list);
+int					vlc_process_uoxbigx(unsigned long nb, t_plist *list);
 long				tab_integer(t_plist *list, va_list arg);
 unsigned long		tab_unsigned(t_plist *list, va_list arg);
 void				space_filling(char *str, int max);

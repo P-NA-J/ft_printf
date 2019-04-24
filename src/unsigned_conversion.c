@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/11 09:52:32 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/18 19:53:06 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/24 14:43:20 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ unsigned long		tab_unsigned(t_plist *list, va_list arg)
 	return (nb);
 }
 
-int					nb_digit_uoxX(unsigned long nb, t_plist *list)
+unsigned int		nb_digit_uoxbigx(unsigned long nb, t_plist *list)
 {
 	int				n_dig;
 
@@ -48,88 +48,76 @@ int					nb_digit_uoxX(unsigned long nb, t_plist *list)
 	return (n_dig);
 }
 
-int					vlc_process_uoxX(unsigned long nb, t_plist *list)
+int					vlc_process_uoxbigx(unsigned long nb, t_plist *list)
 {
 	unsigned int				vlc;
 	unsigned int				n_dig;
 
-	n_dig = nb_digit_uoxX(nb, list);
+	n_dig = nb_digit_uoxbigx(nb, list);
 	vlc = higher_value(list->precision, list->width, n_dig);
-	if ((list->flag & O_FLAG) && (vlc == n_dig) && (list->flag & SHARP_FLAG))
+	if ((list->flag & O_FLAG) && (vlc == n_dig)
+	&& (list->flag & SHARP_FLAG) && nb > 0)
 		vlc += 1;
-	else if (((list->flag & X_FLAG) || (list->flag & BIGX_FLAG)) && (list->flag & SHARP_FLAG) && vlc != list->width)
+	else if (((list->flag & X_FLAG) || (list->flag & BIGX_FLAG))
+	&& (list->flag & SHARP_FLAG) && vlc != list->width)
 		vlc += 2;
 	return (vlc);
 }
 
-int					count_length_uoxX(unsigned long nb, t_plist *list)
+int					count_length_uoxbigx(unsigned long nb, t_plist *list)
 {
 	unsigned int				res;
 
-	res = nb_digit_uoxX(nb, list);
+	res = nb_digit_uoxbigx(nb, list);
 	if (list->precision > res)
 		res = list->precision;
-	else if ((list->flag & O_FLAG) && (list->flag & SHARP_FLAG))
-			res += 1;
-	if (((list->flag & X_FLAG) || (list->flag & BIGX_FLAG)) && (list->flag & SHARP_FLAG))
+	else if ((list->flag & O_FLAG) && (list->flag & SHARP_FLAG) && nb > 0)
+		res += 1;
+	if (((list->flag & X_FLAG) || (list->flag & BIGX_FLAG))
+	&& (list->flag & SHARP_FLAG))
 		res += 2;
 	return (res);
 }
 
-char				*ft_itoa_uoxX(unsigned long nb, t_plist *list)
+void				ft_copy_ouxbigx(t_plist *list, unsigned long nb,
+					char *str, unsigned int count)
 {
-	char			*str;
-	char			*head;
-	unsigned int				len;
-	unsigned int				count;
-
-	len = nb_digit_uoxX(nb, list);
-	count = count_length_uoxX(nb, list);
-	if (!(str = (char *)malloc(sizeof(char) * (count + 1))))
-		return (NULL);
-	head = str;
-	zero_filling(str, count);
-	str[count] = 0;
-	if ((list->flag & O_FLAG) && (list->flag & SHARP_FLAG) && ((len + 1) == count))
+	if ((list->flag & O_FLAG) && (list->flag & SHARP_FLAG)
+	&& ((nb_digit_uoxbigx(nb, list) + 1) == count))
 		*(str++) = '0';
 	else if ((list->flag & X_FLAG) && (list->flag & SHARP_FLAG))
-	{
 		ft_strcpy(str, "0x");
-		str += 2;
-	}
 	else if ((list->flag & BIGX_FLAG) && (list->flag & SHARP_FLAG))
-	{
 		ft_strcpy(str, "0X");
-		str += 2;
-	}
-	if (list->precision > len)
-		str += list->precision - len;
 	if (list->flag & O_FLAG)
-		ft_strcpy(str, ft_itoa_base(nb, "01234567"));
+		ft_strcpy(str, ft_itoa_base_unsigned(nb, "01234567"));
 	if (list->flag & U_FLAG)
 		ft_strcpy(str, ft_itoa(nb));
 	if (list->flag & X_FLAG)
 		ft_strcpy(str, ft_itoa_base_unsigned(nb, "0123456789abcdef"));
 	if (list->flag & BIGX_FLAG)
 		ft_strcpy(str, ft_itoa_base_unsigned(nb, "0123456789ABCDEF"));
-	return (head);
 }
 
-int					unsigned_u_o_x_X(t_plist *list, va_list arg)
+char				*ft_itoa_uoxbigx(unsigned long nb, t_plist *list)
 {
-	unsigned long	nb;
-	int				vlc;
+	char			*str;
+	char			*head;
+	unsigned int	len;
+	unsigned int	count;
 
-	nb = tab_unsigned(list, arg);
-	(void)vlc;
-	vlc = vlc_process_uoxX(nb, list);
-	if (!(list->tab = (char *)malloc(sizeof(char) * (vlc + 1))))
-		return (0);
-	list->tab[vlc] = 0;
-	space_filling(list->tab, vlc);
-	if (list->flag & MINUS_FLAG)
-		ft_strcpy(list->tab, ft_itoa_uoxX(nb,list));
-	else
-		ft_str_rev_cpy(list->tab, ft_itoa_uoxX(nb,list));
-	return (0);
+	len = nb_digit_uoxbigx(nb, list);
+	count = count_length_uoxbigx(nb, list);
+	if (!(str = (char *)malloc(sizeof(char) * (count + 1))))
+		return (NULL);
+	head = str;
+	zero_filling(str, count);
+	str[count] = 0;
+	if (((list->flag & BIGX_FLAG) || ((list->flag & X_FLAG)))
+	&& (list->flag & SHARP_FLAG))
+		str += 2;
+	if (list->precision > len)
+		str += list->precision - len;
+	ft_copy_ouxbigx(list, nb, str, count);
+	return (head);
 }
