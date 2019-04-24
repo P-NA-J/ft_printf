@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/23 18:04:08 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/24 18:32:18 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/24 20:48:47 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int					unsigned_u_o_x_bigx(t_plist *list, va_list arg)
 	list->tab[vlc] = 0;
 	space_filling(list->tab, vlc);
 	if (list->flag & MINUS_FLAG)
-		ft_strcpy(list->tab, ft_itoa_uoxbigx(nb,list));
+		ft_strcpy(list->tab, ft_itoa_uoxbigx(nb, list));
 	else
-		ft_str_rev_cpy(list->tab, ft_itoa_uoxbigx(nb,list));
+		ft_str_rev_cpy(list->tab, ft_itoa_uoxbigx(nb, list));
 	return (1);
 }
