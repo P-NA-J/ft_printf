@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/11 09:52:32 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/24 14:43:20 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/24 20:43:54 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int					count_length_uoxbigx(unsigned long nb, t_plist *list)
 	else if ((list->flag & O_FLAG) && (list->flag & SHARP_FLAG) && nb > 0)
 		res += 1;
 	if (((list->flag & X_FLAG) || (list->flag & BIGX_FLAG))
-	&& (list->flag & SHARP_FLAG))
+	&& (list->flag & SHARP_FLAG) && nb > 0)
 		res += 2;
 	return (res);
 }
@@ -85,14 +85,20 @@ void				ft_copy_ouxbigx(t_plist *list, unsigned long nb,
 	if ((list->flag & O_FLAG) && (list->flag & SHARP_FLAG)
 	&& ((nb_digit_uoxbigx(nb, list) + 1) == count))
 		*(str++) = '0';
-	else if ((list->flag & X_FLAG) && (list->flag & SHARP_FLAG))
+	else if ((list->flag & X_FLAG) && (list->flag & SHARP_FLAG) && nb > 0)
+	{
 		ft_strcpy(str, "0x");
-	else if ((list->flag & BIGX_FLAG) && (list->flag & SHARP_FLAG))
+		str += 2;
+	}
+	else if ((list->flag & BIGX_FLAG) && (list->flag & SHARP_FLAG) && nb > 0)
+	{
 		ft_strcpy(str, "0X");
+		str += 2;
+	}
 	if (list->flag & O_FLAG)
 		ft_strcpy(str, ft_itoa_base_unsigned(nb, "01234567"));
 	if (list->flag & U_FLAG)
-		ft_strcpy(str, ft_itoa(nb));
+		ft_strcpy(str, ft_itoa_base_unsigned(nb, "0123456789"));
 	if (list->flag & X_FLAG)
 		ft_strcpy(str, ft_itoa_base_unsigned(nb, "0123456789abcdef"));
 	if (list->flag & BIGX_FLAG)
@@ -113,9 +119,6 @@ char				*ft_itoa_uoxbigx(unsigned long nb, t_plist *list)
 	head = str;
 	zero_filling(str, count);
 	str[count] = 0;
-	if (((list->flag & BIGX_FLAG) || ((list->flag & X_FLAG)))
-	&& (list->flag & SHARP_FLAG))
-		str += 2;
 	if (list->precision > len)
 		str += list->precision - len;
 	ft_copy_ouxbigx(list, nb, str, count);

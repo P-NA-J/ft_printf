@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/13 09:05:49 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/23 16:59:30 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/24 19:06:46 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,10 @@ unsigned long			nb_digit_base_unsigned(unsigned long nb, char *base)
 	unsigned long		base_len;
 	unsigned long		count;
 
-	if (nb == 0)
-		return (1);
-	count = 0;
+	count = 1;
 	base_len = ft_strlen(base);
-	while (nb)
-	{
+	while (nb /= base_len)
 		count += 1;
-		nb /= 8;
-	}
 	return (count);
 }
 
