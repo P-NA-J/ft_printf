@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/03 22:01:27 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/23 18:33:44 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/27 15:32:24 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 typedef struct		s_plist
 {
 	unsigned int	width;
-	unsigned int	precision;
+	int				precision;
 	unsigned int	flag;
 	char			*tab;
 	struct s_plist	*next;
