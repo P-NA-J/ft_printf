@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/11 09:52:32 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/27 15:54:47 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/27 16:08:16 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int					count_length_uoxbigx(unsigned long nb, t_plist *list)
 	unsigned int				res;
 
 	res = nb_digit_uoxbigx(nb, list);
-	if (nb == 0 && (list->precision < 0))
+	if (nb == 0 && (list->precision == 0))
 		return (0);
 	if (list->precision > (int)res)
 		res = list->precision;

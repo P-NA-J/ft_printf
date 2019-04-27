@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/23 17:55:16 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/27 15:22:00 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/27 16:10:32 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ void		convert_lmc_width(const char *restrict format,
 		i += 1;
 		if (format[i] >= '1' && format[i] <= '9')
 			list->precision = ft_atoi(&format[i]);
-		else
-			list->precision = -1;
 	}
+	else
+		list->precision = -1;
 	while (format[i] >= '0' && format[i] <= '9')
 		i += 1;
 	*i_ptr = i;

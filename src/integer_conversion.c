@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 10:24:01 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/27 15:52:39 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/27 16:08:08 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int					count_length_di(t_plist *list, long nb)
 	unsigned int	count;
 
 	count = nb_digit(nb);
-	if (nb == 0 && (list->precision < 0))
+	if (nb == 0 && (list->precision == 0))
 		return (0);
 	if ((list->flag & ZERO_FLAG) && list->width > count)
 		count = list->width;
