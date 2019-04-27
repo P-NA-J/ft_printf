@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 10:24:01 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/23 18:04:28 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/27 15:52:39 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ long				tab_integer(t_plist *list, va_list arg)
 
 unsigned long		vlc_process_di(long nb, t_plist *list)
 {
-	unsigned long	vlc;
+	long	vlc;
 
 	vlc = higher_value(list->precision, list->width, nb_digit(nb));
-	if (vlc == nb_digit(nb) || vlc == list->precision)
+	if (vlc == (long)nb_digit(nb) || vlc == list->precision)
 		if (((list->flag & PLUS_FLAG) && nb >= 0)
 		|| ((list->flag & SPACE_FLAG) && nb >= 0))
 			vlc += 1;
@@ -49,11 +49,13 @@ int					count_length_di(t_plist *list, long nb)
 	unsigned int	count;
 
 	count = nb_digit(nb);
+	if (nb == 0 && (list->precision < 0))
+		return (0);
 	if ((list->flag & ZERO_FLAG) && list->width > count)
 		count = list->width;
-	else if (list->precision > count)
+	else if (list->precision > (int)count)
 		count = list->precision;
-	if ((list->precision == count) && (nb < 0))
+	if ((list->precision == (int)count) && (nb < 0))
 		count += 1;
 	if (list->flag & PLUS_FLAG && nb >= 0)
 		count += 1;

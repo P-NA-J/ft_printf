@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/03 21:56:41 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/24 22:07:07 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/27 15:41:09 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ unsigned long		print_final(t_plist *list, const char *restrict format)
 	{
 		if (*format == '%' && *(format + 1) != '%')
 		{
-			ft_putstr(list->tab);
+//			ft_putstr(list->tab);
+			printf("%s", list->tab);
 			format += bypass_flag(format);
 			count += ft_strlen(list->tab) - 1;
 			list = list->next;
@@ -49,10 +50,14 @@ unsigned long		print_final(t_plist *list, const char *restrict format)
 		else if (*format == '%' && *(format + 1) == '%')
 		{
 			format += 1;
-			ft_putstr("%");
+//			ft_putstr("%");
+			printf("%%");
 		}
 		else
-			ft_putchar(*format);
+		{
+			printf("%c", *format);
+//			ft_putchar(*format);
+		}
 		format += 1;
 		count += 1;
 	}

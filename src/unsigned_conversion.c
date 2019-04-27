@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/11 09:52:32 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/24 20:43:54 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/27 15:54:47 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,9 @@ int					count_length_uoxbigx(unsigned long nb, t_plist *list)
 	unsigned int				res;
 
 	res = nb_digit_uoxbigx(nb, list);
-	if (list->precision > res)
+	if (nb == 0 && (list->precision < 0))
+		return (0);
+	if (list->precision > (int)res)
 		res = list->precision;
 	else if ((list->flag & O_FLAG) && (list->flag & SHARP_FLAG) && nb > 0)
 		res += 1;
@@ -119,7 +121,7 @@ char				*ft_itoa_uoxbigx(unsigned long nb, t_plist *list)
 	head = str;
 	zero_filling(str, count);
 	str[count] = 0;
-	if (list->precision > len)
+	if (list->precision > (int)len)
 		str += list->precision - len;
 	ft_copy_ouxbigx(list, nb, str, count);
 	return (head);
