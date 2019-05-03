@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 10:24:01 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/27 16:08:08 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/04/29 12:35:12 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ char				*ft_itoa_di(long nb, t_plist *list)
 	char			*str;
 	int				count;
 	unsigned int	i;
+	int				tmp;
 
 	i = 0;
 	count = count_length_di(list, nb);
@@ -84,7 +85,8 @@ char				*ft_itoa_di(long nb, t_plist *list)
 		str[0] = ' ';
 	while (count > 0 && str[count - 1] == '0')
 	{
-		str[count - 1] = '0' + ((nb > 0 ? nb : -nb) % 10);
+		tmp = nb % 10;
+		str[count - 1] = '0' + ((tmp > 0 ? tmp : -tmp) % 10);
 		nb /= 10;
 		count -= 1;
 	}
