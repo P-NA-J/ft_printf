@@ -25,6 +25,7 @@ char	*div_compute(char s_temp[100], unsigned long div)
 	char	tmp[100];
 
 	res = ft_atoi(s_temp) / div;
+	ft_bzero(tmp, 100);
 	if (!div)
 		return ("0");
 	ft_strcpy(tmp, s_temp);
@@ -119,65 +120,45 @@ int main()
 {
 	char tab[100];
 	unsigned long div;
-	unsigned long d;
 
-	printf("%.20f\n", 1.7070626020431519 / 16.);
-	printf("%.20f\n", 1.7070626020431519 / 16);
-/*	div = 1 << 4;
+	div = 1 << 1;
 	printf("DIVISEUR : %lu\n", div);
 	zero_filling(tab, 99);
 	tab[99] = 0;
-	strncpy(tab, "1.7070626020431519000000000000000000000000000000", 48);
-	printf("|%s|\n|0.10669141262769699375|\n",ft_div_str(tab, div));
-	printf("%.25f\n", (float)0x3dda8107);
-*/
-/*
+	strncpy(tab, "1.5000000000000000000000000000000", 48);
+	printf("|%s|\n|0.75|\n\n",ft_div_str(tab, div));
+
+
 	div = 1 << 4;
 	printf("DIVISEUR : %lu\n", div);
 	zero_filling(tab, 99);
 	tab[99] = 0;
-	strncpy(tab, "1.7070626020431519000000000000000000000000000000", 48);
-	printf("|%s|\n|0.106691412627696990966796875|\n",ft_div_str(tab, div));
-*/
-/*
-	div = 1 << 4;
+	strncpy(tab, "1.5000000000000000000000000000000", 48);
+	printf("|%s|\n|0.09375|\n\n",ft_div_str(tab, div));
+
+
+	div = 1 << 8;
 	printf("DIVISEUR : %lu\n", div);
 	zero_filling(tab, 99);
 	tab[99] = 0;
-	strncpy(tab, "1.7070626020431519000000000000000000000000000000", 48);
-	printf("|%s|\n|0.106691412627696990966796875|\n",ft_div_str(tab, div));
-*/
-/*
-	div = 1 << 4;
+	strncpy(tab, "1.5000000000000000000000000000000", 48);
+	printf("|%s|\n|0.005859375|\n\n",ft_div_str(tab, div));
+
+
+	div = 1 << 10;
 	printf("DIVISEUR : %lu\n", div);
 	zero_filling(tab, 99);
 	tab[99] = 0;
-	strncpy(tab, "1.7070626020431519000000000000000000000000000000", 48);
-	printf("|%s|\n|0.106691412627696990966796875|\n",ft_div_str(tab, div));
-*/
-/*
-	div = 1 << 4;
+	strncpy(tab, "1.5000000000000000000000000000000", 48);
+	printf("|%s|\n|0.00146484375|\n\n",ft_div_str(tab, div));
+
+
+	div = 1 << 15;
 	printf("DIVISEUR : %lu\n", div);
 	zero_filling(tab, 99);
 	tab[99] = 0;
-	strncpy(tab, "1.7070626020431519000000000000000000000000000000", 48);
-	printf("|%s|\n|0.106691412627696990966796875|\n",ft_div_str(tab, div));
-*/
-/*
-	div = 1 << 4;
-	printf("DIVISEUR : %lu\n", div);
-	zero_filling(tab, 99);
-	tab[99] = 0;
-	strncpy(tab, "1.7070626020431519000000000000000000000000000000", 48);
-	printf("|%s|\n|0.106691412627696990966796875|\n",ft_div_str(tab, div));
-*/
-/*
-	div = 1 << 4;
-	printf("DIVISEUR : %lu\n", div);
-	zero_filling(tab, 99);
-	tab[99] = 0;
-	strncpy(tab, "1.7070626020431519000000000000000000000000000000", 48);
-	printf("|%s|\n|0.106691412627696990966796875|\n",ft_div_str(tab, div));
-*/
+	strncpy(tab, "1.5000000000000000000000000000000", 48);
+	printf("|%s|\n|0.0000457763671875|\n\n",ft_div_str(tab, div));
+
 	return (0);
 }
