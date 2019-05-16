@@ -42,7 +42,7 @@ size_t          bypass_flag(char *format)
     && format[len] != 'i' && format[len] != 'o' && format[len] != 'u' && format[len] != 'x'
     && format[len] != 'X' && format[len] != 'f')
         len += 1;
-    return (len);
+    return (len + 1);
 }
 
 char            *ft_nstr(char *str, size_t len)
@@ -126,8 +126,6 @@ size_t  print_final(char *format, t_list *list)
     size_t  i;
     char    *s_final;
 
-    if (*format == 0)
-        return (0);
     len = 0;
     i = 0;
     s_final = NULL;
@@ -136,12 +134,22 @@ size_t  print_final(char *format, t_list *list)
         if (format[i] == '%' && format[i + 1] != '%')
         {
             s_final = ft_strjoinf(s_final, ft_nstr(format + i - len, len), 1);
-            i += bypass_flag(format + 1);
+            i += bypass_flag(format + i);
             s_final = ft_strjoinf(s_final, list->tab, 1);
+            list = list->next;
             len = 0;
         }
-        i += 1;
-        len += 1;
+        else if(format[i] == '%' && format[i + 1] == '%')
+        {
+            s_final = ft_strjoinf(s_final, "%", 1);
+            i += 2;
+            len = 0;
+        }
+        else
+        {
+            i += 1;
+            len += 1;
+        }
     }
     s_final = ft_strjoinf(s_final, ft_nstr(format + i - len, len), 1);
     len = ft_strlen(s_final);
@@ -152,21 +160,26 @@ size_t  print_final(char *format, t_list *list)
 
 int main()
 {
-    t_list  *list;
-    t_list  *n1;
-    t_list  *n2;
-    t_list  *n3;
-    char *format;
+    t_list  *list = NULL;
+    t_list  *n1 = NULL;
+    t_list  *n2 = NULL;
+    t_list  *n3 = NULL;
+    char *format = NULL;
 
+    list = malloc(sizeof(t_list));
+    n1 = malloc(sizeof(t_list));
+    n2 = malloc(sizeof(t_list));
+    n3 = malloc(sizeof(t_list));
     list->next = n1;
     n1->next = n2;
     n2->next = n3;
     n3->next = NULL;
-    list->tab = "wallah";
-    n1->tab = "starfoullah";
-    n2->tab = "Hamdoulilah";
-    n3->tab = "WULULU";
-    format = "Salut je %s test ma %89d fonction %#09.32f%%%c voila%5x";
+    list->tab = "list";
+    n1->tab = "n1";
+    n2->tab = "n2";
+    n3->tab = "n3";
+    format = "";
     printf("%zu\n", print_final(format, list));
+    printf("%d\n", printf(""));
     return (0);
 }
