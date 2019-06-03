@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/11 09:52:32 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/27 16:08:16 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/05/29 18:16:09 by darbib           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,32 +34,21 @@ unsigned long		tab_unsigned(t_plist *list, va_list arg)
 	return (nb);
 }
 
-unsigned int		nb_digit_uoxbigx(unsigned long nb, t_plist *list)
-{
-	int				n_dig;
-
-	n_dig = 0;
-	if (list->flag & O_FLAG)
-		n_dig = nb_digit_base_unsigned(nb, "01234567");
-	else if (list->flag & U_FLAG)
-		n_dig = nb_digit_base_unsigned(nb, "0123456789");
-	else if ((list->flag & X_FLAG) || (list->flag & BIGX_FLAG))
-		n_dig = nb_digit_base_unsigned(nb, "0123456789abcdef");
-	return (n_dig);
-}
-
 int					vlc_process_uoxbigx(unsigned long nb, t_plist *list)
 {
 	unsigned int				vlc;
 	unsigned int				n_dig;
 
 	n_dig = nb_digit_uoxbigx(nb, list);
+	if (!list->precision && !nb)
+		n_dig = 0;
 	vlc = higher_value(list->precision, list->width, n_dig);
 	if ((list->flag & O_FLAG) && (vlc == n_dig)
 	&& (list->flag & SHARP_FLAG) && nb > 0)
 		vlc += 1;
 	else if (((list->flag & X_FLAG) || (list->flag & BIGX_FLAG))
-	&& (list->flag & SHARP_FLAG) && vlc != list->width)
+	&& (list->flag & SHARP_FLAG) && nb > 0)
+	//&& vlc != list->width
 		vlc += 2;
 	return (vlc);
 }
@@ -67,17 +56,35 @@ int					vlc_process_uoxbigx(unsigned long nb, t_plist *list)
 int					count_length_uoxbigx(unsigned long nb, t_plist *list)
 {
 	unsigned int				res;
+	int							vlc;
 
 	res = nb_digit_uoxbigx(nb, list);
+	vlc = higher_value(list->width, list->precision, res);
+	printf("vlc : %d\n", vlc);
+	printf("nb : %lu\n", nb);
 	if (nb == 0 && (list->precision == 0))
 		return (0);
+	if ((list->flag & ZERO_FLAG) && vlc == (int)list->width)
+		return (list->width);
 	if (list->precision > (int)res)
 		res = list->precision;
 	else if ((list->flag & O_FLAG) && (list->flag & SHARP_FLAG) && nb > 0)
 		res += 1;
 	if (((list->flag & X_FLAG) || (list->flag & BIGX_FLAG))
 	&& (list->flag & SHARP_FLAG) && nb > 0)
+	{
+		printf("cc\n");
 		res += 2;
+	}
+	if (list->flag & X_FLAG)
+		printf("x\n");
+	if (list->flag & U_FLAG)
+		printf("u\n");
+	if (list->flag & O_FLAG)
+		printf("o\n");
+	if (list->flag & BIGX_FLAG)
+		printf("X\n");
+	printf("flag : %d\n", list->flag);
 	return (res);
 }
 
@@ -98,13 +105,13 @@ void				ft_copy_ouxbigx(t_plist *list, unsigned long nb,
 		str += 2;
 	}
 	if (list->flag & O_FLAG)
-		ft_strcpy(str, ft_itoa_base_unsigned(nb, "01234567"));
+		ft_str_rev_cpy(str, ft_itoa_base_unsigned(nb, "01234567"));
 	if (list->flag & U_FLAG)
-		ft_strcpy(str, ft_itoa_base_unsigned(nb, "0123456789"));
+		ft_str_rev_cpy(str, ft_itoa_base_unsigned(nb, "0123456789"));
 	if (list->flag & X_FLAG)
-		ft_strcpy(str, ft_itoa_base_unsigned(nb, "0123456789abcdef"));
+		ft_str_rev_cpy(str, ft_itoa_base_unsigned(nb, "0123456789abcdef"));
 	if (list->flag & BIGX_FLAG)
-		ft_strcpy(str, ft_itoa_base_unsigned(nb, "0123456789ABCDEF"));
+		ft_str_rev_cpy(str, ft_itoa_base_unsigned(nb, "0123456789ABCDEF"));
 }
 
 char				*ft_itoa_uoxbigx(unsigned long nb, t_plist *list)
@@ -114,15 +121,20 @@ char				*ft_itoa_uoxbigx(unsigned long nb, t_plist *list)
 	unsigned int	len;
 	unsigned int	count;
 
+	if (!list->precision && list->flag & O_FLAG)
+		list->precision = -1;
 	len = nb_digit_uoxbigx(nb, list);
 	count = count_length_uoxbigx(nb, list);
-	if (!(str = (char *)malloc(sizeof(char) * (count + 1))))
+	printf("count : %u\n", count);
+	printf("len : %u\n", len);
+	if (!(str = ft_strnew(count)))
 		return (NULL);
 	head = str;
+	//printf("count : %d\n", count);
 	zero_filling(str, count);
 	str[count] = 0;
-	if (list->precision > (int)len)
-		str += list->precision - len;
+	//if (list->precision > (int)len)
+	//	str += list->precision - len;
 	ft_copy_ouxbigx(list, nb, str, count);
 	return (head);
 }

@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/10 11:45:11 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/23 16:58:17 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/05/28 17:00:04 by darbib           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,13 @@
 #include <float.h>
 #include "../include/ft_printf.h"
 #include "../libft/libft.h"
+
+int				seek_conversion(const char *format, char c)
+{
+	while (*format && !is_conv(*format))
+		format++;
+	return ((*format == c) ? 1 : 0);
+}
 
 void			space_filling(char *str, int max)
 {
@@ -46,6 +53,7 @@ t_plist			*ft_list_push_back(t_plist *list, int width,
 	head = list;
 	if (!(node = (t_plist *)malloc(sizeof(t_plist))))
 		return (NULL);
+	node->vlc = 0;
 	node->width = width;
 	node->precision = precision;
 	node->flag = flag;
@@ -72,27 +80,4 @@ int				higher_value(int precision, int width, int nb)
 	else
 		return (nb);
 	return (0);
-}
-
-unsigned long	nb_digit(long n)
-{
-	unsigned long tmp;
-	unsigned long value;
-
-	value = 0;
-	if (n == 0)
-		return (1);
-	if (n < 0)
-	{
-		tmp = -(n);
-		value += 1;
-	}
-	else
-		tmp = n;
-	while (tmp)
-	{
-		value += 1;
-		tmp /= 10;
-	}
-	return (value);
 }

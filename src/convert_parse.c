@@ -6,11 +6,12 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/23 17:55:16 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/27 16:10:32 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/05/29 15:50:21 by darbib           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/ft_printf.h"
+#include <stdio.h>
 
 void		convert_option(const char *restrict format, t_plist *list,
 			int *i_ptr)
@@ -42,6 +43,8 @@ void		convert_lmc_width(const char *restrict format,
 	int i;
 
 	i = *i_ptr;
+	if (seek_conversion(format + i, 's'))
+		list->width = -1;
 	if (format[i] >= '1' && format[i] <= '9')
 		list->width = ft_atoi(&format[i]);
 	while (format[i] >= '0' && format[i] <= '9')
@@ -103,6 +106,8 @@ void		convert_type(const char *restrict format, t_plist *list,
 		list->flag += BIGX_FLAG;
 	else if (format[i] == 'f')
 		list->flag += F_FLAG;
+	else if (format[i] == '%')
+		list->flag += PCT_FLAG;
 }
 
 int			convert_flag(const char *restrict format,
@@ -113,7 +118,7 @@ int			convert_flag(const char *restrict format,
 	t_plist	*head;
 
 	i = *i_ptr + 1;
-	list = ft_list_push_back(*list_ptr, 1, 0, 0);
+	list = ft_list_push_back(*list_ptr, 0, 0, 0);
 	head = list;
 	while (list->next)
 		list = list->next;
@@ -128,7 +133,7 @@ int			convert_flag(const char *restrict format,
 	if (!(check_step_parse(format, i, 3)))
 		return (0);
 	convert_type(format, list, i);
-	*i_ptr = i + 1;
+	*i_ptr = i;
 	*list_ptr = head;
 	return (1);
 }

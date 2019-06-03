@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/23 18:04:08 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/24 20:48:47 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/05/29 15:59:00 by darbib           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int					integer_d_i(t_plist *list, va_list arg)
 		ft_strcpy(list->tab, ft_itoa_di(nb, list));
 	else
 		ft_str_rev_cpy(list->tab, ft_itoa_di(nb, list));
+	list->vlc = vlc;
 	return (1);
 }
 
@@ -51,5 +52,6 @@ int					unsigned_u_o_x_bigx(t_plist *list, va_list arg)
 		ft_strcpy(list->tab, ft_itoa_uoxbigx(nb, list));
 	else
 		ft_str_rev_cpy(list->tab, ft_itoa_uoxbigx(nb, list));
+	list->vlc = vlc;
 	return (1);
 }

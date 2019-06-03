@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/13 09:05:49 by pauljull          #+#    #+#             */
-/*   Updated: 2019/04/24 19:06:46 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/05/28 22:47:23 by darbib           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,29 +41,6 @@ unsigned long			power_rank(unsigned long nb, unsigned long len_base)
 	while (nb / power_unsigned(len_base, result))
 		result += 1;
 	return (result - 1);
-}
-
-int						base_validity(char *base)
-{
-	char				*tmp;
-
-	if (!base)
-		return (0);
-	if (ft_strlen(base) == 1)
-		return (0);
-	while (*base)
-	{
-		if (*(base + 1))
-			tmp = base + 1;
-		while (*tmp)
-		{
-			if (*base == *tmp)
-				return (0);
-			tmp += 1;
-		}
-		base += 1;
-	}
-	return (1);
 }
 
 unsigned long			nb_digit_base_unsigned(unsigned long nb, char *base)
