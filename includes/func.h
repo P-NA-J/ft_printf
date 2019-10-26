@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 10:00:52 by pauljull          #+#    #+#             */
-/*   Updated: 2019/09/18 06:54:29 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/10/03 13:44:19 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ int				ft_opt_auth(char c);
 void			ft_convert_to_base(t_buffer *buff, t_flag *c_arg,
 				int type, char *b);
 unsigned int	ft_order(t_flag *c_arg, char type, int base_l);
-long			ft_arg_signed(t_flag *c_arg);
-unsigned long	ft_arg_unsigned(t_flag *c_arg);
+void			ft_arg_signed(t_flag *c_arg);
+void			ft_arg_unsigned(t_flag *c_arg);
 int				ft_radical_unsigned(unsigned long nb, int base);
 int				ft_radical_signed(long nb);
 int				ft_pre_conversion(t_flag *c_arg, char type, int base_l);

@@ -72,7 +72,7 @@ PATH_OBJ = $(addprefix obj/, $(OBJ))
 all: $(NAME)
 
 $(NAME): $(PATH_OBJ)
-	
+
 
 $(addprefix obj/, %.o): $(addprefix src/, %.c)
 	@gcc -Wall -Wextra -Werror -c $< -o $@

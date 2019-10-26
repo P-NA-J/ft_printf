@@ -6,21 +6,11 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 15:16:10 by pauljull          #+#    #+#             */
-/*   Updated: 2019/09/26 20:07:23 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/10/03 13:43:32 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/libftprintf.h"
-
-void			ft_correct_parser(t_flag *c_arg)
-{
-	if (c_arg->flag & PLUS_FLAG)
-		if (c_arg->flag & SPACE_FLAG)
-			c_arg->flag -= SPACE_FLAG;
-	if ((c_arg->flag & MINUS_FLAG) || c_arg->precision != UNCHANGED)
-		if (c_arg->flag & ZERO_FLAG)
-			c_arg->flag -= ZERO_FLAG;
-}
 
 static int		ft_conv_auth(char c)
 {
@@ -49,6 +39,27 @@ static int		ft_size_auth(char c)
 	return (FALSE);
 }
 
+int				is_cs(const char *str)
+{
+	while (*str && !(ft_conv_auth(*str)))
+		str += 1;
+	if (*str)
+		if (*str == 'c' || *str == 's')
+			return (1);
+	return (0);
+}
+
+void			ft_correct_parser(t_flag *c_arg, const char *str)
+{
+	if (c_arg->flag & PLUS_FLAG)
+		if (c_arg->flag & SPACE_FLAG)
+			c_arg->flag -= SPACE_FLAG;
+	if (((c_arg->flag & MINUS_FLAG) || c_arg->precision != UNCHANGED) &&
+	!is_cs(str))
+		if (c_arg->flag & ZERO_FLAG)
+			c_arg->flag -= ZERO_FLAG;
+}
+
 void			ft_parser(const char **format, t_buffer *buff, t_flag *c_arg)
 {
 	int			i;
@@ -67,7 +78,7 @@ void			ft_parser(const char **format, t_buffer *buff, t_flag *c_arg)
 		else
 			return ;
 	}
-	ft_correct_parser(c_arg);
+	ft_correct_parser(c_arg, *format);
 	if (**format)
 		while (i < NB_CONV)
 			if (**format == g_conv_auth[i++])

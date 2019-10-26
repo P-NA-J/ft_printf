@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/09 02:08:30 by pauljull          #+#    #+#             */
-/*   Updated: 2019/09/18 06:09:44 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/10/03 13:43:50 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,36 +34,31 @@ int					ft_radical_signed(long nb)
 	return (res += ft_radical_signed(nb / 10));
 }
 
-unsigned long		ft_arg_unsigned(t_flag *c_arg)
+void				ft_arg_unsigned(t_flag *c_arg)
 {
-	unsigned long	nb;
-
 	if ((c_arg->flag & MINL_FLAG) || (c_arg->flag & P_FLAG))
-		nb = (unsigned long)va_arg(c_arg->arg, unsigned long);
+		c_arg->nb_u = (unsigned long)va_arg(c_arg->arg, unsigned long);
 	else if (c_arg->flag & H_FLAG)
-		nb = (unsigned short)va_arg(c_arg->arg, unsigned int);
+		c_arg->nb_u = (unsigned short)va_arg(c_arg->arg, unsigned int);
 	else if (c_arg->flag & HH_FLAG)
-		nb = (unsigned char)va_arg(c_arg->arg, unsigned int);
+		c_arg->nb_u = (unsigned char)va_arg(c_arg->arg, unsigned int);
 	else if (c_arg->flag & MINLL_FLAG)
-		nb = (unsigned long long)va_arg(c_arg->arg, unsigned long long);
+		c_arg->nb_u = (unsigned long long)va_arg(c_arg->arg,
+		unsigned long long);
 	else
-		nb = (unsigned int)va_arg(c_arg->arg, unsigned int);
-	return (nb);
+		c_arg->nb_u = (unsigned int)va_arg(c_arg->arg, unsigned int);
 }
 
-long				ft_arg_signed(t_flag *c_arg)
+void				ft_arg_signed(t_flag *c_arg)
 {
-	long			nb;
-
 	if (c_arg->flag & H_FLAG)
-		nb = (short)va_arg(c_arg->arg, int);
+		c_arg->nb_s = (short)va_arg(c_arg->arg, int);
 	else if (c_arg->flag & HH_FLAG)
-		nb = (char)va_arg(c_arg->arg, int);
+		c_arg->nb_s = (char)va_arg(c_arg->arg, int);
 	else if (c_arg->flag & MINL_FLAG)
-		nb = (long)va_arg(c_arg->arg, long);
+		c_arg->nb_s = (long)va_arg(c_arg->arg, long);
 	else if (c_arg->flag & MINLL_FLAG)
-		nb = (long long)va_arg(c_arg->arg, long long);
+		c_arg->nb_s = (long long)va_arg(c_arg->arg, long long);
 	else
-		nb = (int)va_arg(c_arg->arg, int);
-	return (nb);
+		c_arg->nb_s = (int)va_arg(c_arg->arg, int);
 }

@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 10:00:13 by pauljull          #+#    #+#             */
-/*   Updated: 2019/09/26 14:22:54 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/09/27 23:14:44 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,14 @@
 # define X_FLAG (1 << 17)
 # define BIGX_FLAG (1 << 18)
 # define F_FLAG (1 << 19)
-# define NB_AUTH_C 27
+# define NB_AUTH_C 29
 # define NB_OPT 5
-# define NB_SIZE 3
+# define NB_SIZE 5
 # define NB_CONV 10
 # define TRUE 1
 # define FALSE 0
 # define UNCHANGED -1
-# define BUFF_SIZE 10
+# define BUFF_SIZE 100
 # define PRECISION 0
 # define LMC 1
 # define MAX(a,b) (a > b ? a : b)

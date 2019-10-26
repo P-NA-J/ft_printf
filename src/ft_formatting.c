@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 02:41:49 by pauljull          #+#    #+#             */
-/*   Updated: 2019/09/18 06:46:02 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/09/28 00:24:27 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ void	ft_arg_recover(t_flag *c_arg, char type, int base_l)
 {
 	if (type == 's')
 	{
-		c_arg->nb_s = ft_arg_signed(c_arg);
+		ft_arg_signed(c_arg);
 		c_arg->nb_u = 0;
 		c_arg->radical = ft_radical_signed(c_arg->nb_s);
 	}
 	else
 	{
-		c_arg->nb_u = ft_arg_unsigned(c_arg);
+		ft_arg_unsigned(c_arg);
 		c_arg->nb_s = 0;
 		c_arg->radical = ft_radical_unsigned(c_arg->nb_u, base_l);
 	}
@@ -33,10 +33,10 @@ int		ft_pre_conversion(t_flag *c_arg, char type, int base_l)
 	int	max;
 
 	ft_arg_recover(c_arg, type, base_l);
-	max = MAX(c_arg->precision, c_arg->radical);
 	if (c_arg->precision == 0 && c_arg->nb_s == 0 && c_arg->nb_u == 0 &&
 	!((c_arg->flag & SHARP_FLAG) && (c_arg->flag & O_FLAG)))
 		c_arg->radical = 0;
+	max = MAX(c_arg->precision, c_arg->radical);
 	if (((c_arg->flag & D_FLAG) && c_arg->nb_s >= 0 &&
 	((PLUS_FLAG & c_arg->flag) || (SPACE_FLAG & c_arg->flag)))
 	|| c_arg->nb_s < 0)

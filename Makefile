@@ -4,10 +4,9 @@ CFLAG = -Wall -Werror -Wextra
 
 SRC =	buffer.c \
 		ft_error_parse.c \
-		ft_parser.c \
 		ft_printf.c \
 		ft_option.c \
-		ft_option.c \
+		ft_parser.c \
 		ft_size.c \
 		ft_lmc_precision.c \
 		ft_argument.c \
@@ -96,16 +95,12 @@ PATH_LIBFT_OBJ = $(addprefix libft/obj/, $(LIBFT_OBJ))
 
 all: libft $(NAME)
 
-libft:
+libft: obj
 	@make -C libft
 
-$(NAME): obj $(PATH_OBJ)
+$(NAME): $(PATH_OBJ)
 	@ar rc $@ $(PATH_OBJ) $(PATH_LIBFT_OBJ)
 	@ranlib $@
-
-obj :
-	mkdir obj
-	mkdir libft/obj
 
 $(addprefix obj/, %.o): $(addprefix src/, %.c)
 	@gcc $(CFLAG) -c $< -o $@

@@ -6,7 +6,7 @@
 /*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 15:09:48 by pauljull          #+#    #+#             */
-/*   Updated: 2019/09/26 19:06:41 by pauljull         ###   ########.fr       */
+/*   Updated: 2019/09/27 17:52:40 by pauljull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	ft_flush_buffer(t_buffer *buff)
 
 void	ft_putstr_buffer(t_buffer *buff, char *str, int len)
 {
-	if (len > (BUFF_SIZE - buff->buff_i))
+	while (len > (BUFF_SIZE - buff->buff_i))
 	{
 		len -= BUFF_SIZE - buff->buff_i;
 		ft_strncpy(buff->buffer + buff->buff_i, str, BUFF_SIZE - buff->buff_i);
